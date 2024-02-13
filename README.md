@@ -7,8 +7,6 @@ The initial audience were university students who work on their theses without g
 
 This software may be used to sell licenses to the professorships where the software is desired - redeeming some of the money they should have earned. Feel free to use it in any circumstances where you see fit.
 
----
-
 ## Usage
 ### Individual functions
 ```python
