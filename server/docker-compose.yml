@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_NAME=your_database
+      - DB_USER=your_username
+      - DB_PASS=your_password
+      - DB_HOST=db
+    depends_on:
+      - db
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=your_database
+      - POSTGRES_USER=your_username
+      - POSTGRES_PASSWORD=your_password

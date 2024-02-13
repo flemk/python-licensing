@@ -1,11 +1,3 @@
-'''Copyright (c) 2024
-Author: Franz Ludwig Kostelezky
-Email: info@kostelezky.com
-License: MIT
-Description: A simple licensing system for Python applications
-Usage: see github.com/flemk/python-licensing
-Version: 1.0.0'''
-
 import hashlib
 import os
 import getpass
