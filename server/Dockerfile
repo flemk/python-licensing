@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.8-slim-buster
+FROM 3.9.18-slim-bullseye
 
 # Set environment variables
 ENV DB_NAME=your_database
