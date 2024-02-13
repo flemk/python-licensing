@@ -15,8 +15,14 @@ ADD . /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Generate a self-signed certificate
+RUN openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj '/CN=localhost'
+
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
 
-# Run server.py when the container launches
+# (dev) Run server.py when the container launches
 CMD ["python", "server.py"]
+
+# (prod) Run the command to start Gunicorn
+#CMD ["gunicorn", "-b", "0.0.0.0:5000", "server:app"]
