@@ -19,6 +19,7 @@ from 'cert.pem' and 'key.pem' respectively.
 import os
 from flask import Flask, request
 import psycopg2
+from server_tools import initialize_db
 
 app = Flask(__name__)
 
@@ -71,4 +72,7 @@ def handle_check_license():
     return {'valid': valid}
 
 if __name__ == '__main__':
+    conn = connect_to_db()
+    initialize_db(conn)
+    conn.close()
     app.run(ssl_context=('cert.pem', 'key.pem'))

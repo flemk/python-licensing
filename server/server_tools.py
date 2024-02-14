@@ -7,7 +7,8 @@ It supports the following operations:
 - Remove an entry from the database by ID
 - List all entries in the database in a readable format
 
-The script uses the psycopg2 library to connect to the database. The connection parameters are read from environment variables.
+The script uses the psycopg2 library to connect to the database.
+The connection parameters are read from environment variables.
 
 Usage:
 - python server-tools.py --init
@@ -40,17 +41,21 @@ def initialize_db(conn):
     Initialize the database. Creates a table named 'licenses' if it doesn't exist.
     Takes a connection object as argument.
     """
-    with conn.cursor() as cur:
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS licenses (
-                id SERIAL PRIMARY KEY,
-                hash TEXT NOT NULL,
-                expires_after DATETIME NOT NULL,
-                activation_key TEXT NOT NULL,
-                activated_on DATETIME
-            )
-        """)
-    conn.commit()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT 1 FROM entries LIMIT 1")
+    except psycopg2.Error as _:
+        with conn.cursor() as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS licenses (
+                    id SERIAL PRIMARY KEY,
+                    hash TEXT NOT NULL,
+                    expires_after DATETIME NOT NULL,
+                    activation_key TEXT NOT NULL,
+                    activated_on DATETIME
+                )
+            """)
+        conn.commit()
 
 def add_entry(conn, entry):
     """
