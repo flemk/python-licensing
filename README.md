@@ -24,8 +24,7 @@ pip3 install python-licensing
 ```
 
 ### License server
-### Using docker-compose (recommended)
-#### Using docker
+#### Using docker-compose (recommended)
 ```cmd
 docker-compose up -d
 ```
