@@ -40,8 +40,8 @@ def check_license(hash, key):
         database=os.getenv("DB_NAME"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASS"),
-        host="localhost",
-        port="5432"
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT")
     )
     cur = conn.cursor()
     cur.execute("SELECT valid FROM licenses WHERE hash = %s AND key = %s", (hash, key))
@@ -64,6 +64,7 @@ def handle_check_license():
     dict: A dictionary with the keys 'valid' (a boolean indicating if the license is valid)
     and 'message' (a string with a message about the license status).
     """
+    print('incoming request')
     hash = request.args.get('hash')
     key = request.args.get('key')
     valid = check_license(hash, key)

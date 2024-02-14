@@ -5,6 +5,8 @@ FROM python:3.9.18-slim-bullseye
 ENV DB_NAME=your_database
 ENV DB_USER=your_username
 ENV DB_PASS=your_password
+ENV DB_HOST=localhost
+ENV DB_PORT=5432
 
 # Set the working directory in the container to /app
 WORKDIR /app
