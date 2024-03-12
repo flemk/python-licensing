@@ -21,6 +21,7 @@ import os
 import argparse
 import psycopg2
 import psycopg2.extras
+from datetime import datetime, timedelta
 
 def connect_to_db():
     """
@@ -66,7 +67,16 @@ def add_entry(conn, entry):
     Takes a connection object and the entry data as arguments.
     """
     with conn.cursor() as cur:
-        cur.execute("INSERT INTO licenses (data) VALUES (%s)", (entry,))
+        cur.execute("""
+            INSERT INTO licenses (id, hash, expires_after, activation_key, activated_on) 
+            VALUES (%s, %s, %s, %s, %s)
+            """,
+            (entry['id'],
+             entry['hash'],
+             datetime.now() + timedelta(seconds=int(entry['expires_after'])),
+             entry['activation_key'],
+             entry['activated_on'])
+        )
     conn.commit()
 
 def remove_entry(conn, entry_id):
@@ -87,7 +97,7 @@ def list_entries(conn):
         cur.execute("SELECT * FROM licenses")
         entries = cur.fetchall()
     for entry in entries:
-        print(f"ID: {entry['id']}, Data: {entry['data']}")
+        print(f"ID: {entry['id']}, Hash: {entry['hash']}, Expires after: {entry['expires_after']}, Activation key: {entry['activation_key']}, Activated on: {entry['activated_on']}")
 
 def main():
     """
@@ -99,7 +109,7 @@ def main():
                         help='Initialize the database')
     parser.add_argument('--add',
                         metavar='ENTRY',
-                        help='Add an entry to the database')
+                        help='Add an entry to the database. Syntax: --add "id=1 hash=hash expires_after=1234 activation_key=activation-key activated_on=4321"')
     parser.add_argument('--remove',
                         metavar='ID',
                         type=int,
@@ -115,7 +125,15 @@ def main():
     if args.init:
         initialize_db(conn)
     elif args.add:
-        add_entry(conn, args.add)
+        arguments = args.add.split(' ')
+        entry = {
+            'id': arguments[0].split('id=')[-1][-1],
+            'hash': arguments[1].split('hash=')[-1],
+            'expires_after': arguments[2].split('expires_after=')[-1],
+            'activation_key': arguments[3].split('activation_key=')[-1],
+            'activated_on': arguments[4].split('activated_on=')[-1],
+        }
+        add_entry(conn, entry)
     elif args.remove:
         remove_entry(conn, args.remove)
     elif args.list:
