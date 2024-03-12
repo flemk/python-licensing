@@ -68,6 +68,7 @@ def handle_check_license():
     return {'valid': valid}
 
 if __name__ == '__main__':
+    # TODO wait for the db service to accept connections
     conn = connect_to_db()
     initialize_db(conn)
     app.run(ssl_context=('cert.pem', 'key.pem'))
