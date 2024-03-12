@@ -24,7 +24,7 @@ from server_tools import initialize_db, connect_to_db
 app = Flask(__name__)
 conn = None
 
-def check_license(hash, key):
+def check_license(license_hash, key):
     """
     Check if a license is valid.
 
@@ -38,10 +38,13 @@ def check_license(hash, key):
     Returns:
     bool: True if the license is valid, False otherwise.
     """
-    cur = conn.cursor()
-    cur.execute("SELECT valid FROM licenses WHERE hash = %s AND key = %s", (hash, key))
+    conn_ = conn
+    if conn is None or conn.closed:
+        conn_ = connect_to_db()
+
+    cur = conn_.cursor()
+    cur.execute("SELECT * FROM licenses WHERE hash = %s AND activation_key = %s", (license_hash, key))
     result = cur.fetchone()
-    conn.close()
     if result is None:
         return False
     return result[0]
@@ -59,14 +62,12 @@ def handle_check_license():
     dict: A dictionary with the keys 'valid' (a boolean indicating if the license is valid)
     and 'message' (a string with a message about the license status).
     """
-    print('incoming request')
-    hash = request.args.get('hash')
-    key = request.args.get('key')
-    valid = check_license(hash, key)
+    license_hash = request.args.get('hash')
+    key = request.args.get('activation_key')
+    valid = check_license(license_hash, key)
     return {'valid': valid}
 
 if __name__ == '__main__':
     conn = connect_to_db()
     initialize_db(conn)
-    conn.close()
     app.run(ssl_context=('cert.pem', 'key.pem'))
