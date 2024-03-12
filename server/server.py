@@ -44,7 +44,15 @@ def check_license(license_hash, key):
     cur.execute("SELECT * FROM licenses WHERE activation_key = %s",
                 (key,))
     result = cur.fetchone()
-    print(key, result)
+
+    # TODO
+    # 1. Check if there is already a activated license with matching key
+    # 1.1. If there is, check the hash
+    # 1.2. Check the expiration date
+    # 3. If there is not, check activation key and activate
+    # 3.1. Insert hash and activation data into the database
+    # 4. Generate new key and send back to the client
+
     if result is None:
         return False
     return result[0]
