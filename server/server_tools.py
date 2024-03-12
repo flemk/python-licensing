@@ -53,9 +53,9 @@ def initialize_db(conn):
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS licenses (
                     id SERIAL PRIMARY KEY,
-                    hash TEXT NOT NULL,
+                    hash TEXT NOT NULL UNIQUE,
                     expires_after TIMESTAMP NOT NULL,
-                    activation_key TEXT NOT NULL,
+                    activation_key TEXT NOT NULL UNIQUE,
                     activated_on TIMESTAMP
                 )
             """)
@@ -73,7 +73,7 @@ def add_entry(conn, entry):
             """,
             (entry['id'],
              entry['hash'],
-             datetime.now() + timedelta(seconds=int(entry['expires_after'])),
+             entry['expires_after'],
              entry['activation_key'],
              entry['activated_on'])
         )
@@ -115,7 +115,7 @@ def main():
     parser.add_argument('--add',
                         metavar='ENTRY',
                         help='''Add an entry to the database.
-                        Example: --add "id=1 hash=hash expires_after=1234
+                        Example: --add "id=1 hash=hash expires_after=2024-02-01
                         activation_key=activation-key activated_on=2024-01-01"''')
     parser.add_argument('--remove',
                         metavar='ID',

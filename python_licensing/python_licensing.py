@@ -18,13 +18,13 @@ def get_activation_key():
     Get the activation key. If the key is not stored locally, ask the user to enter it.
     Store the key locally for future use.
     """
-    key_file = os.path.join(os.path.expanduser('~'), '.license_key')
+    key_file = os.path.join(os.path.expanduser('.'), '.license_key')
     if os.path.exists(key_file):
-        with open(key_file, 'r') as f:
+        with open(key_file, 'r', encoding='utf-8') as f:
             return f.read().strip()
     else:
         key = input("Enter your activation key: ")
-        with open(key_file, 'w') as f:
+        with open(key_file, 'w', encoding='utf-8') as f:
             f.write(key)
         return key
 
@@ -38,13 +38,13 @@ def licensed(server_url):
             activation_key = get_activation_key()
             try:
                 response = requests.get(
-                    server_url,
+                    server_url + '/check_license',
                     params={
                         'hash': unique_hash,
                         'key': activation_key
                         },
-                        verify=False,
-                        timeout=20)
+                    verify=False,
+                    timeout=20)
                 if response.status_code == 200 and response.json()['valid']:
                     return func(*args, **kwargs)
             except requests.exceptions.Timeout:

@@ -41,9 +41,10 @@ def check_license(license_hash, key):
         conn_ = connect_to_db()
 
     cur = conn_.cursor()
-    cur.execute("SELECT * FROM licenses WHERE hash = %s AND activation_key = %s",
-                (license_hash, key))
+    cur.execute("SELECT * FROM licenses WHERE activation_key = %s",
+                (key,))
     result = cur.fetchone()
+    print(key, result)
     if result is None:
         return False
     return result[0]
@@ -62,7 +63,7 @@ def handle_check_license():
     and 'message' (a string with a message about the license status).
     """
     license_hash = request.args.get('hash')
-    key = request.args.get('activation_key')
+    key = request.args.get('key')
     valid = check_license(license_hash, key)
     return {'valid': valid}
 

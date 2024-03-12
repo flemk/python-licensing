@@ -1,2 +1,5 @@
 server/key.pem
 server/cert.pem
+.license_key
+server/__pycache__/
+python_licensing/__pycache__/
