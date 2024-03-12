@@ -10,8 +10,10 @@ services:
           - DB_HOST=${DB_HOST}
           - DB_PORT=${DB_PORT}
           - LICENSE_PORT=${LICENSE_PORT}
+          - LICENSE_PORT_EXTERNAL=${LICENSE_PORT_EXTERNAL}
+          - ENVIRONMENT=${ENVIRONMENT}
     ports:
-      - "${LICENSE_PORT}:${LICENSE_PORT}"
+      - "${LICENSE_PORT_EXTERNAL}:${LICENSE_PORT_EXTERNAL}"
     environment:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}

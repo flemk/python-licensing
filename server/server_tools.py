@@ -19,7 +19,6 @@ Usage:
 
 import os
 import argparse
-from datetime import datetime, timedelta
 import psycopg2
 import psycopg2.extras
 

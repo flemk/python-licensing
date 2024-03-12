@@ -16,6 +16,7 @@ The application is served over HTTPS. The SSL certificate and key are read
 from 'cert.pem' and 'key.pem' respectively.
 """
 
+import os
 from flask import Flask, request
 from server_tools import initialize_db, connect_to_db
 
@@ -79,4 +80,10 @@ if __name__ == '__main__':
     # TODO wait for the db service to accept connections
     conn = connect_to_db()
     initialize_db(conn)
-    app.run(ssl_context=('cert.pem', 'key.pem'))
+
+    if os.getenv('ENVIRONMENT', 'production') == 'development':
+        print("Running in development mode.")
+        app.run(ssl_context=('cert.pem', 'key.pem'), host='0.0.0.0')
+    else:
+        print("Running in production mode.")
+        app.run(host='0.0.0.0', port=5000)
