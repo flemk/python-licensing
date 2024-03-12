@@ -1,19 +1,34 @@
 version: '3.8'
 services:
   web:
-    image: ghcr.io/flemk/python-licensing:latest
+    build:
+      context: .
+      args:
+          - DB_NAME=${DB_NAME}
+          - DB_USER=${DB_USER}
+          - DB_PASS=${DB_PASS}
+          - DB_HOST=${DB_HOST}
+          - DB_PORT=${DB_PORT}
+          - LICENSE_PORT=${LICENSE_PORT}
     ports:
-      - "5000:5000"
+      - "${LICENSE_PORT}:${LICENSE_PORT}"
     environment:
-      - DB_NAME=your_database
-      - DB_USER=your_username
-      - DB_PASS=your_password
-      - DB_HOST=db
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
     depends_on:
       - db
   db:
     image: postgres:13
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=your_database
-      - POSTGRES_USER=your_username
-      - POSTGRES_PASSWORD=your_password
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+
+volumes:
+  db-data:

@@ -28,11 +28,11 @@ def connect_to_db():
     Returns a connection object.
     """
     conn = psycopg2.connect(
-        dbname=os.getenv('DB_NAME'),
-        user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASS'),
-        host=os.getenv('DB_HOST'),
-        port=os.getenv('DB_PORT')
+        dbname=os.getenv('DB_NAME', 'database_name'),
+        user=os.getenv('DB_USER', 'database_user'),
+        password=os.getenv('DB_PASS', 'database_password'),
+        host=os.getenv('DB_HOST', 'localhost'),
+        port=os.getenv('DB_PORT', '5432')
     )
     return conn
 
@@ -43,16 +43,19 @@ def initialize_db(conn):
     """
     try:
         with conn.cursor() as cur:
-            cur.execute("SELECT 1 FROM entries LIMIT 1")
+            cur.execute("SELECT 1 FROM licenses LIMIT 1")
+            print("Table already exists.")
     except psycopg2.Error as _:
+        conn.rollback()
+        print("Creating new table.")
         with conn.cursor() as cur:
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS licenses (
                     id SERIAL PRIMARY KEY,
                     hash TEXT NOT NULL,
-                    expires_after DATETIME NOT NULL,
+                    expires_after TIMESTAMP NOT NULL,
                     activation_key TEXT NOT NULL,
-                    activated_on DATETIME
+                    activated_on TIMESTAMP
                 )
             """)
         conn.commit()

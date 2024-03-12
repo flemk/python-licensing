@@ -19,9 +19,10 @@ from 'cert.pem' and 'key.pem' respectively.
 import os
 from flask import Flask, request
 import psycopg2
-from server_tools import initialize_db
+from server_tools import initialize_db, connect_to_db
 
 app = Flask(__name__)
+conn = None
 
 def check_license(hash, key):
     """
@@ -37,13 +38,6 @@ def check_license(hash, key):
     Returns:
     bool: True if the license is valid, False otherwise.
     """
-    conn = psycopg2.connect(
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASS"),
-        host=os.getenv("DB_HOST"),
-        port=os.getenv("DB_PORT")
-    )
     cur = conn.cursor()
     cur.execute("SELECT valid FROM licenses WHERE hash = %s AND key = %s", (hash, key))
     result = cur.fetchone()
