@@ -19,9 +19,9 @@ Usage:
 
 import os
 import argparse
+from datetime import datetime, timedelta
 import psycopg2
 import psycopg2.extras
-from datetime import datetime, timedelta
 
 def connect_to_db():
     """
@@ -97,7 +97,12 @@ def list_entries(conn):
         cur.execute("SELECT * FROM licenses")
         entries = cur.fetchall()
     for entry in entries:
-        print(f"ID: {entry['id']}, Hash: {entry['hash']}, Expires after: {entry['expires_after']}, Activation key: {entry['activation_key']}, Activated on: {entry['activated_on']}")
+        print(f"""
+              ID: {entry['id']},
+              Hash: {entry['hash']},
+              Expires after: {entry['expires_after']},
+              Activation key: {entry['activation_key']},
+              Activated on: {entry['activated_on']}""")
 
 def main():
     """
@@ -109,7 +114,9 @@ def main():
                         help='Initialize the database')
     parser.add_argument('--add',
                         metavar='ENTRY',
-                        help='Add an entry to the database. Syntax: --add "id=1 hash=hash expires_after=1234 activation_key=activation-key activated_on=4321"')
+                        help='''Add an entry to the database.
+                        Example: --add "id=1 hash=hash expires_after=1234
+                        activation_key=activation-key activated_on=2024-01-01"''')
     parser.add_argument('--remove',
                         metavar='ID',
                         type=int,

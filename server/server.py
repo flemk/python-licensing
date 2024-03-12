@@ -16,9 +16,7 @@ The application is served over HTTPS. The SSL certificate and key are read
 from 'cert.pem' and 'key.pem' respectively.
 """
 
-import os
 from flask import Flask, request
-import psycopg2
 from server_tools import initialize_db, connect_to_db
 
 app = Flask(__name__)
@@ -43,7 +41,8 @@ def check_license(license_hash, key):
         conn_ = connect_to_db()
 
     cur = conn_.cursor()
-    cur.execute("SELECT * FROM licenses WHERE hash = %s AND activation_key = %s", (license_hash, key))
+    cur.execute("SELECT * FROM licenses WHERE hash = %s AND activation_key = %s",
+                (license_hash, key))
     result = cur.fetchone()
     if result is None:
         return False
