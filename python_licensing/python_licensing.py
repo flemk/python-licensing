@@ -28,7 +28,7 @@ def get_activation_key():
             f.write(key)
         return key
 
-def license(server_url):
+def licensed(server_url):
     """
     Decorator function to check the license before executing a function.
     """

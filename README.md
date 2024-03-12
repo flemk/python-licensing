@@ -12,7 +12,7 @@ This software may be used to sell licenses to the professorships where the softw
 ```python
 import python_licensing as pl
 
-@pl.license('https://my-licensing-server.example.com')
+@pl.licensed('https://my-licensing-server.example.com')
 def my_licensed_function():
     pass
 ```
