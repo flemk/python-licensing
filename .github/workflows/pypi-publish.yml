@@ -29,9 +29,8 @@ jobs:
         sed -i "s/%VERSION_PLACEHOLDER%/${VERSION}/g" python_licensing/setup.py
 
     - name: Build package
-      run: |
-        cd python_licensing
-        python -m build
+      run: python -m build
+      working-directory: python_licensing
 
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@release/v1
