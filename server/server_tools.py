@@ -84,7 +84,7 @@ def remove_entry(conn, entry_id):
     Takes a connection object and the entry ID as arguments.
     """
     with conn.cursor() as cur:
-        cur.execute("DELETE FROM entries WHERE id = %s", (entry_id,))
+        cur.execute("DELETE FROM licenses WHERE id = %s", (entry_id,))
     conn.commit()
 
 def list_entries(conn):
