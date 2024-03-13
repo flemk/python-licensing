@@ -16,6 +16,7 @@ import python_licensing as pl
 def my_licensed_function():
     pass
 ```
+Have a look at ```example.py```.
 
 ## Installation
 ### python-licensing tool
@@ -33,6 +34,7 @@ docker-compose up -d
 ```cmd
 docker run python-licensing:latest
 ```
+Keep in mind, that you'd need to specify the environment variables and build variables by hand.
 
 ## Obfuscating your script
 **1. Install PyArmor using pip:**

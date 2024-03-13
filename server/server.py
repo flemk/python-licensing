@@ -19,6 +19,7 @@ from 'cert.pem' and 'key.pem' respectively.
 import os
 from flask import Flask, request
 from server_tools import initialize_db, connect_to_db
+from waitress import serve
 
 app = Flask(__name__)
 conn = None
@@ -86,4 +87,4 @@ if __name__ == '__main__':
         app.run(ssl_context=('cert.pem', 'key.pem'), host='0.0.0.0')
     else:
         print("Running in production mode.")
-        app.run(host='0.0.0.0', port=5000)
+        serve(app, host="0.0.0.0", port=os.getenv('LICENSE_PORT', '5000'), threads=4)
