@@ -22,4 +22,6 @@ setup(
     author_email='info@kostelezky.com',
     description='License your python script and provide licenses via a licensing server.',
     url='https://github.com/flemk/python-licensing',
+    long_description=open('README.md', encoding='utf-8').read(),
+    long_description_content_type='text/markdown',
 )
