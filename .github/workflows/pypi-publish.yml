@@ -23,16 +23,19 @@ jobs:
         python -m pip install --upgrade pip
         pip install build
 
-    - name: Update version tag in setup.py
+    - name: Update version tag in python_licensing/setup.py
       run: |
         VERSION=$(echo ${GITHUB_REF#refs/tags/})
-        sed -i "s/%VERSION_PLACEHOLDER%/${VERSION}/g" setup.py
+        sed -i "s/%VERSION_PLACEHOLDER%/${VERSION}/g" python_licensing/setup.py
 
     - name: Build package
-      run: python -m build
+      run: |
+        co python_licensing
+        python -m build
 
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
+        distributions: "python_licensing/dist/*"
