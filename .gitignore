@@ -3,3 +3,5 @@ server/cert.pem
 .license_key
 server/__pycache__/
 python_licensing/__pycache__/
+documentation/src/.$communication.drawio.bkp
+documentation/src/.$server-infrastructure.drawio.bkp
