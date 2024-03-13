@@ -5,3 +5,5 @@ server/__pycache__/
 python_licensing/__pycache__/
 documentation/src/.$communication.drawio.bkp
 documentation/src/.$server-infrastructure.drawio.bkp
+python_licensing/python_licensing.egg-info/
+python_licensing/dist/
