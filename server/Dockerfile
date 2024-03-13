@@ -32,5 +32,6 @@ RUN sed -i "s/%LICENSE_PORT_EXTERNAL%/${LICENSE_PORT_EXTERNAL}/g" /etc/nginx/sit
 RUN sed -i "s/%LICENSE_PORT%/${LICENSE_PORT}/g" /etc/nginx/sites-available/default
 
 # DEV: CMD ["python", "server.py"]
-# PROD: CMD service nginx start && python server.py
-CMD ["/bin/sh", "-c", "[ \"$ENVIRONMENT\" = \"PROD\" ] && (service nginx start && python server.py) || python server.py"]
+
+# PROD:
+CMD service nginx start && python server.py
