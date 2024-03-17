@@ -18,11 +18,20 @@ from 'cert.pem' and 'key.pem' respectively.
 
 import os
 from flask import Flask, request
-from server_tools import initialize_db, connect_to_db
 from waitress import serve
+from server_tools import initialize_db, connect_to_db
 
 app = Flask(__name__)
-conn = None
+_conn = None  # pylint: disable=invalid-name
+
+def get_connection():
+    """
+    Return the database connection.
+    """
+    global _conn  # pylint: disable=global-statement
+    if _conn is None:
+        _conn = connect_to_db()
+    return _conn
 
 def check_license(license_hash, key):
     """
@@ -38,22 +47,19 @@ def check_license(license_hash, key):
     Returns:
     bool: True if the license is valid, False otherwise.
     """
-    conn_ = conn
-    if conn is None or conn.closed:
-        conn_ = connect_to_db()
-
-    cur = conn_.cursor()
+    cur = get_connection().cursor()
     cur.execute("SELECT * FROM licenses WHERE activation_key = %s",
                 (key,))
     result = cur.fetchone()
 
-    # TODO
+    # TODO  # pylint: disable=fixme
     # 1. Check if there is already a activated license with matching key
     # 1.1. If there is, check the hash
     # 1.2. Check the expiration date
     # 3. If there is not, check activation key and activate
     # 3.1. Insert hash and activation data into the database
     # 4. Generate new key and send back to the client
+    _ = license_hash
 
     if result is None:
         return False
@@ -78,9 +84,8 @@ def handle_check_license():
     return {'valid': valid}
 
 if __name__ == '__main__':
-    # TODO wait for the db service to accept connections
-    conn = connect_to_db()
-    initialize_db(conn)
+    # TODO wait for the db service to accept connections  # pylint: disable=fixme
+    initialize_db(get_connection())
 
     if os.getenv('ENVIRONMENT', 'production') == 'development':
         print("Running in development mode.")

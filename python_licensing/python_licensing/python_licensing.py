@@ -1,3 +1,8 @@
+"""
+This module provides the `licensed` decorator for checking license validity 
+against a licensing server before executing a function.
+"""
+
 import hashlib
 import os
 import getpass
@@ -53,5 +58,6 @@ def licensed(server_url):
                 print(f"An error occurred: {e}")
             print("Invalid license or unable to reach the licensing server.")
             input("Press any key to exit.")
+            return None
         return wrapper
     return decorator

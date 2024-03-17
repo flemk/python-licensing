@@ -58,7 +58,7 @@ def initialize_db(conn):
                     activated_on TIMESTAMP
                 )
             """)
-        # TODO make expires_after property in seconds
+        # TODO make expires_after property in seconds  # pylint: disable=fixme
         conn.commit()
 
 def add_entry(conn, entry):
@@ -140,7 +140,7 @@ def main():
             'activation_key': arguments[3].split('activation_key=')[-1],
             'activated_on': arguments[4].split('activated_on=')[-1],
         }
-        # TODO make activated_on and hash property not mandatory, they can be initially null in db
+        # TODO make activated_on and hash property not mandatory, they can be initially null in db  # pylint: disable=fixme
         add_entry(conn, entry)
     elif args.remove:
         remove_entry(conn, args.remove)
