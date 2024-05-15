@@ -1,26 +1,21 @@
 version: '3.8'
 services:
   web:
-    build:
-      context: .
-      args:
-          - DB_NAME=${DB_NAME}
-          - DB_USER=${DB_USER}
-          - DB_PASS=${DB_PASS}
-          - DB_HOST=${DB_HOST}
-          - DB_PORT=${DB_PORT}
-          - LICENSE_PORT=${LICENSE_PORT}
-          - LICENSE_PORT_EXTERNAL=${LICENSE_PORT_EXTERNAL}
-          - ENVIRONMENT=${ENVIRONMENT}
-    ports:
-      - "${LICENSE_PORT_EXTERNAL}:${LICENSE_PORT_EXTERNAL}"
+    image: pl-server:latest
     environment:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - LICENSE_PORT=${LICENSE_PORT}
+      - LICENSE_PORT_EXTERNAL=${LICENSE_PORT_EXTERNAL}
+      - ENVIRONMENT=${ENVIRONMENT}
+    ports:
+      - "${LICENSE_PORT_EXTERNAL}:${LICENSE_PORT_EXTERNAL}"
     depends_on:
       - db
+
   db:
     image: postgres:13
     ports:
